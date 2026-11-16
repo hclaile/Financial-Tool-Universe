@@ -1,0 +1,73 @@
+priority_rules:
+- {data_type: quote, region: CN, sources: [akshare, yfinance, tushare]}
+- {data_type: quote, region: US, sources: [fmp, yfinance]}
+- {data_type: quote, region: HK, sources: [akshare, yfinance]}
+- {data_type: ohlcv, region: CN, sources: [akshare, yfinance, tushare]}
+- {data_type: ohlcv, region: US, sources: [fmp, yfinance]}
+- {data_type: ohlcv, region: HK, sources: [akshare, yfinance]}
+- {data_type: financial_statement, region: CN, sources: [akshare, tushare]}
+- {data_type: financial_statement, region: US, sources: [sec_edgar, fmp]}
+- {data_type: company_profile, region: US, sources: [fmp, alphavantage]}
+- {data_type: financial_ratios, region: US, sources: [fmp]}
+- {data_type: enterprise_value, region: US, sources: [fmp]}
+- {data_type: financial_growth, region: US, sources: [fmp]}
+- {data_type: dcf_valuation, region: US, sources: [fmp]}
+- {data_type: rating, region: US, sources: [fmp]}
+- {data_type: key_metrics, region: US, sources: [fmp]}
+- {data_type: technical_indicator, region: CN, sources: [akshare, yfinance]}
+- {data_type: technical_indicator, region: US, sources: [fmp, yfinance]}
+- {data_type: market_status, region: US, sources: [fmp]}
+- {data_type: filing_list, region: CN, sources: [akshare, tushare]}
+- {data_type: filing_list, region: US, sources: [sec_edgar]}
+- {data_type: sec_filing_list, region: US, sources: [sec_edgar, fmp]}
+- {data_type: filing_content, region: US, sources: [sec_edgar]}
+- {data_type: institutional_holders, region: US, sources: [fmp]}
+- {data_type: mutual_fund_holders, region: US, sources: [fmp]}
+- {data_type: insider_trading, region: US, sources: [fmp]}
+- {data_type: form_13f, region: US, sources: [fmp]}
+- {data_type: earning_calendar, region: US, sources: [fmp]}
+- {data_type: earnings_surprises, region: US, sources: [fmp]}
+- {data_type: dividend_calendar, region: US, sources: [fmp]}
+- {data_type: ipo_calendar, region: US, sources: [fmp]}
+- {data_type: stock_split_calendar, region: US, sources: [fmp]}
+- {data_type: economic_calendar, region: US, sources: [fmp]}
+- {data_type: macro_series, region: CN, sources: [akshare, tushare]}
+- {data_type: macro_series, region: US, sources: [fred]}
+- {data_type: shipping_series, region: CN, sources: [sse_scfi]}
+- {data_type: money_flow, region: CN, sources: [akshare, tushare]}
+- {data_type: search_results, region: CN, sources: [akshare, tushare]}
+- {data_type: search_results, region: US, sources: [fmp, sec_edgar]}
+- {data_type: etf_weightings, region: US, sources: [fmp]}
+- {data_type: market_cap, region: US, sources: [fmp]}
+- {data_type: treasury_yield, region: US, sources: [fmp]}
+- {data_type: analyst_estimates, region: US, sources: [fmp]}
+- {data_type: price_target, region: US, sources: [fmp]}
+- {data_type: earnings_transcript, region: US, sources: [fmp]}
+- {data_type: esg_score, region: US, sources: [fmp]}
+- {data_type: altman_z_score, region: US, sources: [fmp]}
+- {data_type: piotroski_score, region: US, sources: [fmp]}
+- {data_type: wacc, region: US, sources: [fmp]}
+- {data_type: commodity_data, region: US, sources: [fmp, yfinance]}
+- {data_type: forex_data, region: CN, sources: [yfinance]}
+- {data_type: forex_data, region: US, sources: [fmp, yfinance]}
+- {data_type: web_search_results, sources: [tavily, serpapi, google_search]}
+- {data_type: macro_search_results, sources: [fred]}
+- {data_type: knowledge_entity, sources: [wikipedia, google_knowledge_graph]}
+- {data_type: web_scrape_results, sources: [web_scraper]}
+- {data_type: filing_downloads, sources: [sec_api, sec_edgar]}
+- {data_type: news_list, region: CN, sources: [akshare]}
+- {data_type: news_list, region: US, sources: [alphavantage, finnhub, news_api, alpaca_news]}
+- {data_type: news_sentiment, region: CN, sources: []}
+- {data_type: news_sentiment, region: US, sources: [finnhub, alphavantage]}
+- {data_type: crypto_price, sources: [okx, ccxt]}
+- {data_type: crypto_ohlcv, sources: [fmp, ccxt, yfinance]}
+- {data_type: onchain_balance, sources: [onchain]}
+- {data_type: '*', sources: [external_mcp, local_files]}
+- {data_type: fund_info, region: CN, sources: [akshare, tushare]}
+failover:
+  max_retries: 1
+  retry_delay: 1s
+  source_retry_delays: {yfinance: 5s}
+  source_rate_limit_cooldown: {yfinance: 10s}
+  source_concurrency: {yfinance: 1}
+  circuit_breaker: {failure_threshold: 3, reset_timeout: 30s}

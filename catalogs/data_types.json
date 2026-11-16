@@ -1,0 +1,1942 @@
+{
+  "quote": {
+    "fields": [
+      "symbol",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume",
+      "change",
+      "change_pct",
+      "timestamp"
+    ],
+    "primary_key": "symbol",
+    "output_example": {
+      "symbol": "AAPL",
+      "open": 100.25,
+      "high": 100.25,
+      "low": 100.25,
+      "close": 100.25,
+      "volume": 1000000,
+      "change": "example",
+      "change_pct": "example",
+      "timestamp": "example"
+    }
+  },
+  "ohlcv": {
+    "fields": [
+      "symbol",
+      "date",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "open": 100.25,
+        "high": 100.25,
+        "low": 100.25,
+        "close": 100.25,
+        "volume": 1000000
+      }
+    ]
+  },
+  "realtime_quote": {
+    "fields": [
+      "symbol",
+      "price",
+      "bid",
+      "ask",
+      "volume",
+      "timestamp"
+    ],
+    "primary_key": "symbol",
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "price": 100.25,
+        "bid": 100.25,
+        "ask": 100.25,
+        "volume": 1000000,
+        "timestamp": "example"
+      }
+    ]
+  },
+  "financial_statement": {
+    "fields": [
+      "symbol",
+      "date",
+      "revenue",
+      "cogs",
+      "gross_profit",
+      "net_income"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "revenue": 100.25,
+        "cogs": 100.25,
+        "gross_profit": 100.25,
+        "net_income": 100.25
+      }
+    ]
+  },
+  "company_profile": {
+    "fields": [
+      "symbol",
+      "company_name",
+      "exchange",
+      "sector",
+      "industry",
+      "ceo",
+      "country",
+      "full_time_employees",
+      "ipo_date",
+      "market_cap",
+      "price",
+      "description"
+    ],
+    "primary_key": "symbol",
+    "output_example": {
+      "symbol": "AAPL",
+      "company_name": "Example Company",
+      "exchange": "NASDAQ",
+      "sector": "example",
+      "industry": "example",
+      "ceo": "example",
+      "country": "US",
+      "full_time_employees": 10,
+      "ipo_date": "example",
+      "market_cap": 100.25,
+      "price": 100.25,
+      "description": "Concise example description."
+    }
+  },
+  "financial_ratios": {
+    "fields": [
+      "symbol",
+      "date",
+      "current_ratio",
+      "debt_to_equity",
+      "gross_profit_margin",
+      "net_profit_margin",
+      "return_on_assets",
+      "return_on_equity",
+      "price_to_earnings",
+      "price_to_book",
+      "price_to_sales",
+      "ev_to_ebitda",
+      "dividend_yield",
+      "payout_ratio"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "current_ratio": 0.12,
+        "debt_to_equity": "example",
+        "gross_profit_margin": 0.12,
+        "net_profit_margin": 0.12,
+        "return_on_assets": 0.12,
+        "return_on_equity": 0.12,
+        "price_to_earnings": 0.12,
+        "price_to_book": 0.12,
+        "price_to_sales": 0.12,
+        "ev_to_ebitda": "example",
+        "dividend_yield": 0.12,
+        "payout_ratio": 0.12
+      }
+    ]
+  },
+  "enterprise_value": {
+    "fields": [
+      "symbol",
+      "date",
+      "market_cap",
+      "enterprise_value",
+      "cash_and_short_term",
+      "total_debt"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "market_cap": 100.25,
+        "enterprise_value": 100.25,
+        "cash_and_short_term": "example",
+        "total_debt": "example"
+      }
+    ]
+  },
+  "financial_growth": {
+    "fields": [
+      "symbol",
+      "date",
+      "revenue_growth",
+      "gross_profit_growth",
+      "net_income_growth",
+      "eps_growth",
+      "dividend_growth",
+      "assets_growth",
+      "debt_growth"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "revenue_growth": "example",
+        "gross_profit_growth": "example",
+        "net_income_growth": "example",
+        "eps_growth": "example",
+        "dividend_growth": "example",
+        "assets_growth": "example",
+        "debt_growth": "example"
+      }
+    ]
+  },
+  "dcf_valuation": {
+    "fields": [
+      "symbol",
+      "date",
+      "dcf",
+      "stock_price",
+      "dcf_diff_pct"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "date": "2024-01-02",
+      "dcf": 100.25,
+      "stock_price": 100.25,
+      "dcf_diff_pct": "example"
+    }
+  },
+  "rating": {
+    "fields": [
+      "symbol",
+      "date",
+      "rating_recommendation",
+      "rating_score_dcf",
+      "rating_score_roe",
+      "rating_score_roa",
+      "rating_score_de",
+      "rating_score_pe",
+      "rating_score_pb"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "rating_recommendation": "example",
+        "rating_score_dcf": 0.12,
+        "rating_score_roe": 0.12,
+        "rating_score_roa": 0.12,
+        "rating_score_de": 0.12,
+        "rating_score_pe": 0.12,
+        "rating_score_pb": 0.12
+      }
+    ]
+  },
+  "key_metrics": {
+    "fields": [
+      "symbol",
+      "date",
+      "market_cap",
+      "pe_ratio",
+      "ps_ratio",
+      "pb_ratio",
+      "ev_to_sales",
+      "ev_to_ebitda",
+      "roe",
+      "roa",
+      "debt_to_equity",
+      "dividend_yield",
+      "free_cash_flow_yield"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "market_cap": 100.25,
+        "pe_ratio": 0.12,
+        "ps_ratio": 0.12,
+        "pb_ratio": 0.12,
+        "ev_to_sales": "example",
+        "ev_to_ebitda": "example",
+        "roe": "example",
+        "roa": "example",
+        "debt_to_equity": "example",
+        "dividend_yield": 0.12,
+        "free_cash_flow_yield": 0.12
+      }
+    ]
+  },
+  "technical_indicator": {
+    "fields": [
+      "symbol",
+      "date",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume",
+      "indicator_value"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "open": 100.25,
+        "high": 100.25,
+        "low": 100.25,
+        "close": 100.25,
+        "volume": 1000000,
+        "indicator_value": 0.12
+      }
+    ]
+  },
+  "market_status": {
+    "fields": [
+      "name",
+      "open",
+      "current_time"
+    ],
+    "primary_key": "name",
+    "output_example": {
+      "name": "NYSE",
+      "open": true,
+      "current_time": "2024-01-02T14:30:00Z"
+    }
+  },
+  "sectors_performance": {
+    "fields": [
+      "sector",
+      "change_pct"
+    ],
+    "primary_key": "sector",
+    "output_example": [
+      {
+        "sector": "example",
+        "change_pct": "example"
+      }
+    ]
+  },
+  "filing_list": {
+    "fields": [
+      "filing_id",
+      "symbol",
+      "form_type",
+      "filed_date",
+      "title"
+    ],
+    "primary_key": "filing_id",
+    "output_example": [
+      {
+        "filing_id": "example",
+        "symbol": "AAPL",
+        "form_type": "example",
+        "filed_date": "2024-01-02",
+        "title": "Example result"
+      }
+    ]
+  },
+  "filing_content": {
+    "fields": [
+      "filing_id",
+      "form_type",
+      "content",
+      "filed_date"
+    ],
+    "primary_key": "filing_id",
+    "output_example": {
+      "filing_id": "example",
+      "form_type": "example",
+      "content": "Concise example content.",
+      "filed_date": "2024-01-02"
+    }
+  },
+  "sec_filing_list": {
+    "fields": [
+      "symbol",
+      "filing_type",
+      "filed_date",
+      "accepted_date",
+      "final_link",
+      "description"
+    ],
+    "primary_key": [
+      "symbol",
+      "filing_type",
+      "filed_date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "filing_type": "example",
+        "filed_date": "2024-01-02",
+        "accepted_date": "example",
+        "final_link": "https://www.sec.gov/Archives/edgar/data/320193/example.htm",
+        "description": "Concise example description."
+      }
+    ]
+  },
+  "institutional_holders": {
+    "fields": [
+      "holder",
+      "shares",
+      "value_reported",
+      "date_reported",
+      "change"
+    ],
+    "primary_key": [
+      "holder",
+      "date_reported"
+    ],
+    "output_example": [
+      {
+        "holder": "Example Company",
+        "shares": 1000000,
+        "value_reported": "example",
+        "date_reported": "example",
+        "change": "example"
+      }
+    ]
+  },
+  "mutual_fund_holders": {
+    "fields": [
+      "holder",
+      "shares",
+      "value_reported",
+      "date_reported"
+    ],
+    "primary_key": [
+      "holder",
+      "date_reported"
+    ],
+    "output_example": [
+      {
+        "holder": "Example Company",
+        "shares": 1000000,
+        "value_reported": "example",
+        "date_reported": "example"
+      }
+    ]
+  },
+  "insider_trading": {
+    "fields": [
+      "symbol",
+      "insider_name",
+      "title",
+      "transaction_type",
+      "transaction_date",
+      "securities_transacted",
+      "price"
+    ],
+    "primary_key": [
+      "symbol",
+      "insider_name",
+      "transaction_date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "insider_name": "Example Company",
+        "title": "Example result",
+        "transaction_type": "example",
+        "transaction_date": "example",
+        "securities_transacted": "example",
+        "price": 100.25
+      }
+    ]
+  },
+  "form_13f": {
+    "fields": [
+      "ticker",
+      "company_name",
+      "shares",
+      "value",
+      "date_reported"
+    ],
+    "primary_key": [
+      "ticker",
+      "date_reported"
+    ],
+    "output_example": [
+      {
+        "ticker": "AAPL",
+        "company_name": "Example Company",
+        "shares": 1000000,
+        "value": 100.25,
+        "date_reported": "example"
+      }
+    ]
+  },
+  "earning_calendar": {
+    "fields": [
+      "symbol",
+      "date",
+      "eps_estimated",
+      "eps_reported",
+      "revenue_estimated",
+      "revenue_reported",
+      "time",
+      "exchange"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "eps_estimated": "example",
+        "eps_reported": "example",
+        "revenue_estimated": "example",
+        "revenue_reported": "example",
+        "time": "example",
+        "exchange": "NASDAQ"
+      }
+    ]
+  },
+  "earnings_surprises": {
+    "fields": [
+      "symbol",
+      "date",
+      "eps_estimated",
+      "eps_reported",
+      "eps_surprise",
+      "eps_surprise_pct",
+      "revenue_estimated",
+      "revenue_reported"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "eps_estimated": "example",
+        "eps_reported": "example",
+        "eps_surprise": "example",
+        "eps_surprise_pct": "example",
+        "revenue_estimated": "example",
+        "revenue_reported": "example"
+      }
+    ]
+  },
+  "dividend_calendar": {
+    "fields": [
+      "symbol",
+      "date",
+      "adj_dividend",
+      "dividend",
+      "record_date",
+      "payment_date",
+      "declaration_date"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "adj_dividend": "example",
+        "dividend": "example",
+        "record_date": "example",
+        "payment_date": "2024-01-02",
+        "declaration_date": 0.12
+      }
+    ]
+  },
+  "ipo_calendar": {
+    "fields": [
+      "symbol",
+      "company_name",
+      "date",
+      "exchange",
+      "price",
+      "shares"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "company_name": "Example Company",
+        "date": "2024-01-02",
+        "exchange": "NASDAQ",
+        "price": 100.25,
+        "shares": 1000000
+      }
+    ]
+  },
+  "stock_split_calendar": {
+    "fields": [
+      "symbol",
+      "date",
+      "numerator",
+      "denominator"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "numerator": "example",
+        "denominator": "example"
+      }
+    ]
+  },
+  "economic_calendar": {
+    "fields": [
+      "event",
+      "date",
+      "country",
+      "actual",
+      "previous",
+      "estimate",
+      "importance"
+    ],
+    "primary_key": [
+      "event",
+      "date",
+      "country"
+    ],
+    "output_example": [
+      {
+        "event": "Example event",
+        "date": "2024-01-02",
+        "country": "US",
+        "actual": 100.25,
+        "previous": 100.25,
+        "estimate": 100.25,
+        "importance": 10
+      }
+    ]
+  },
+  "macro_series": {
+    "fields": [
+      "series_id",
+      "date",
+      "value"
+    ],
+    "primary_key": [
+      "series_id",
+      "date"
+    ],
+    "output_example": [
+      {
+        "series_id": "example",
+        "date": "2024-01-02",
+        "value": 100.25
+      }
+    ]
+  },
+  "shipping_series": {
+    "fields": [
+      "series_id",
+      "date",
+      "value",
+      "previous_value",
+      "change",
+      "frequency",
+      "unit",
+      "source"
+    ],
+    "primary_key": [
+      "series_id",
+      "date"
+    ],
+    "output_example": [
+      {
+        "series_id": "SCFI",
+        "date": "2026-07-03",
+        "value": 3326.87,
+        "previous_value": 3239.64,
+        "change": 87.23,
+        "frequency": "weekly",
+        "unit": "points",
+        "source": "sse_scfi"
+      }
+    ]
+  },
+  "news_list": {
+    "fields": [
+      "title",
+      "source",
+      "published_at",
+      "url",
+      "symbols"
+    ],
+    "primary_key": "url",
+    "output_example": [
+      {
+        "title": "Example result",
+        "source": "example_source",
+        "published_at": "example",
+        "url": "https://www.sec.gov/Archives/edgar/data/320193/example.htm",
+        "symbols": [
+          "AAPL",
+          "MSFT"
+        ]
+      }
+    ]
+  },
+  "fund_info": {
+    "fields": [
+      "symbol",
+      "name",
+      "nav",
+      "total_assets",
+      "holdings"
+    ],
+    "primary_key": "symbol",
+    "output_example": {
+      "symbol": "AAPL",
+      "name": "Example Company",
+      "nav": 100.25,
+      "total_assets": 100.25,
+      "holdings": [
+        {
+          "label": "example",
+          "value": 1
+        }
+      ]
+    }
+  },
+  "etf_weightings": {
+    "fields": [
+      "sector_or_country",
+      "weight_pct"
+    ],
+    "primary_key": "sector_or_country",
+    "output_example": [
+      {
+        "sector_or_country": 10,
+        "weight_pct": "example"
+      }
+    ]
+  },
+  "options_chain": {
+    "fields": [
+      "symbol",
+      "strike",
+      "expiry",
+      "call_bid",
+      "call_ask",
+      "put_bid",
+      "put_ask"
+    ],
+    "primary_key": [
+      "symbol",
+      "strike",
+      "expiry"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "strike": 100.25,
+        "expiry": "2024-01-02",
+        "call_bid": "example",
+        "call_ask": "example",
+        "put_bid": "example",
+        "put_ask": "example"
+      }
+    ]
+  },
+  "crypto_price": {
+    "fields": [
+      "symbol",
+      "price",
+      "volume_24h",
+      "change_24h",
+      "timestamp"
+    ],
+    "primary_key": "symbol",
+    "output_example": {
+      "symbol": "AAPL",
+      "price": 100.25,
+      "volume_24h": 10,
+      "change_24h": "example",
+      "timestamp": "example"
+    }
+  },
+  "onchain_balance": {
+    "fields": [
+      "address",
+      "chain",
+      "balance",
+      "token",
+      "timestamp"
+    ],
+    "primary_key": [
+      "address",
+      "chain"
+    ],
+    "output_example": {
+      "address": "example",
+      "chain": "ethereum",
+      "balance": 100.25,
+      "token": "ETH",
+      "timestamp": "example"
+    }
+  },
+  "money_flow": {
+    "fields": [
+      "symbol",
+      "date",
+      "inflow",
+      "outflow",
+      "net_flow"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "date": "2024-01-02",
+        "inflow": "example",
+        "outflow": "example",
+        "net_flow": "example"
+      }
+    ]
+  },
+  "market_cap": {
+    "fields": [
+      "symbol",
+      "date",
+      "market_cap"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "date": "2024-01-02",
+      "market_cap": 100.25
+    }
+  },
+  "risk_metric": {
+    "fields": [
+      "portfolio",
+      "var",
+      "confidence",
+      "horizon_days"
+    ],
+    "primary_key": "portfolio",
+    "output_example": {
+      "portfolio": "example",
+      "var": "example",
+      "confidence": 0.12,
+      "horizon_days": "example"
+    }
+  },
+  "document_content": {
+    "fields": [
+      "path",
+      "format",
+      "content",
+      "pages"
+    ],
+    "primary_key": "path",
+    "output_example": {
+      "path": "artifacts/example/result.json",
+      "format": "example",
+      "content": "Concise example content.",
+      "pages": "example"
+    }
+  },
+  "search_results": {
+    "fields": [
+      "query",
+      "source",
+      "data_type",
+      "relevance",
+      "payload"
+    ],
+    "primary_key": [
+      "query",
+      "source"
+    ],
+    "output_example": [
+      {
+        "query": "Apple annual report",
+        "source": "example_source",
+        "data_type": "example",
+        "relevance": "example",
+        "payload": "example"
+      }
+    ]
+  },
+  "treasury_yield": {
+    "fields": [
+      "date",
+      "month_3",
+      "month_6",
+      "year_1",
+      "year_2",
+      "year_3",
+      "year_5",
+      "year_7",
+      "year_10",
+      "year_30"
+    ],
+    "primary_key": "date",
+    "output_example": {
+      "date": "2024-01-02",
+      "month_3": "example",
+      "month_6": "example",
+      "year_1": "example",
+      "year_2": "example",
+      "year_3": "example",
+      "year_5": "example",
+      "year_7": "example",
+      "year_10": "example",
+      "year_30": "example"
+    }
+  },
+  "analyst_estimates": {
+    "fields": [
+      "symbol",
+      "date",
+      "estimated_eps_avg",
+      "estimated_eps_low",
+      "estimated_eps_high",
+      "estimated_revenue_avg",
+      "estimated_revenue_low",
+      "estimated_revenue_high",
+      "number_of_analysts"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "date": "2024-01-02",
+      "estimated_eps_avg": "example",
+      "estimated_eps_low": "example",
+      "estimated_eps_high": "example",
+      "estimated_revenue_avg": "example",
+      "estimated_revenue_low": "example",
+      "estimated_revenue_high": "example",
+      "number_of_analysts": "example"
+    }
+  },
+  "price_target": {
+    "fields": [
+      "symbol",
+      "target_consensus",
+      "target_median",
+      "target_high",
+      "target_low",
+      "analyst_count"
+    ],
+    "primary_key": "symbol",
+    "output_example": {
+      "symbol": "AAPL",
+      "target_consensus": "example",
+      "target_median": "example",
+      "target_high": "example",
+      "target_low": "example",
+      "analyst_count": 10
+    }
+  },
+  "earnings_transcript": {
+    "fields": [
+      "symbol",
+      "quarter",
+      "year",
+      "date",
+      "content"
+    ],
+    "primary_key": [
+      "symbol",
+      "quarter",
+      "year"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "quarter": "example",
+      "year": "example",
+      "date": "2024-01-02",
+      "content": "Concise example content."
+    }
+  },
+  "esg_score": {
+    "fields": [
+      "symbol",
+      "date",
+      "environmental_score",
+      "social_score",
+      "governance_score",
+      "esg_score"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "date": "2024-01-02",
+      "environmental_score": 0.12,
+      "social_score": 0.12,
+      "governance_score": 0.12,
+      "esg_score": 0.12
+    }
+  },
+  "altman_z_score": {
+    "fields": [
+      "symbol",
+      "date",
+      "altman_z_score"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "date": "2024-01-02",
+      "altman_z_score": 0.12
+    }
+  },
+  "piotroski_score": {
+    "fields": [
+      "symbol",
+      "date",
+      "piotroski_score"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "date": "2024-01-02",
+      "piotroski_score": 0.12
+    }
+  },
+  "wacc": {
+    "fields": [
+      "symbol",
+      "date",
+      "wacc",
+      "cost_of_equity",
+      "cost_of_debt"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "date": "2024-01-02",
+      "wacc": "example",
+      "cost_of_equity": "example",
+      "cost_of_debt": "example"
+    }
+  },
+  "commodity_data": {
+    "fields": [
+      "symbol",
+      "name",
+      "price",
+      "change",
+      "change_pct"
+    ],
+    "primary_key": "symbol",
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "name": "Example Company",
+        "price": 100.25,
+        "change": "example",
+        "change_pct": "example"
+      }
+    ]
+  },
+  "forex_data": {
+    "fields": [
+      "symbol",
+      "name",
+      "price",
+      "change",
+      "change_pct"
+    ],
+    "primary_key": "symbol",
+    "output_example": [
+      {
+        "symbol": "AAPL",
+        "name": "Example Company",
+        "price": 100.25,
+        "change": "example",
+        "change_pct": "example"
+      }
+    ]
+  },
+  "web_search_results": {
+    "fields": [
+      "query",
+      "answer",
+      "results",
+      "source"
+    ],
+    "primary_key": "query",
+    "output_example": {
+      "query": "Apple annual report",
+      "answer": "Apple filed its annual report.",
+      "results": [
+        {
+          "title": "Apple annual report",
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/example.htm",
+          "content": "Example result",
+          "score": 0.95
+        }
+      ],
+      "source": "tavily"
+    }
+  },
+  "factor_ic_metrics": {
+    "fields": [
+      "ic_mean",
+      "ic_std",
+      "ir",
+      "rank_ic_mean",
+      "rank_ic_std",
+      "rank_ir",
+      "ic_win_rate",
+      "sample_count"
+    ],
+    "primary_key": "formula",
+    "output_example": {
+      "ic_mean": 0.12,
+      "ic_std": 0.12,
+      "ir": 0.12,
+      "rank_ic_mean": 0.12,
+      "rank_ic_std": 0.12,
+      "rank_ir": 0.12,
+      "ic_win_rate": 0.12,
+      "sample_count": 10
+    }
+  },
+  "macro_search_results": {
+    "fields": [
+      "query",
+      "source",
+      "data_type",
+      "relevance",
+      "payload"
+    ],
+    "primary_key": [
+      "query",
+      "source"
+    ],
+    "output_example": [
+      {
+        "query": "Apple annual report",
+        "source": "example_source",
+        "data_type": "example",
+        "relevance": "example",
+        "payload": "example"
+      }
+    ]
+  },
+  "knowledge_entity": {
+    "fields": [
+      "name",
+      "type",
+      "description",
+      "url",
+      "score",
+      "image"
+    ],
+    "primary_key": "url",
+    "output_example": [
+      {
+        "name": "Example Company",
+        "type": "example",
+        "description": "Concise example description.",
+        "url": "https://www.sec.gov/Archives/edgar/data/320193/example.htm",
+        "score": 0.12,
+        "image": "example"
+      }
+    ]
+  },
+  "web_scrape_results": {
+    "fields": [
+      "url",
+      "title",
+      "sections",
+      "word_count",
+      "error"
+    ],
+    "primary_key": "url",
+    "output_example": [
+      {
+        "url": "https://www.sec.gov/Archives/edgar/data/320193/example.htm",
+        "title": "Example result",
+        "sections": [
+          {
+            "label": "example",
+            "value": 1
+          }
+        ],
+        "word_count": 10,
+        "error": "example"
+      }
+    ]
+  },
+  "filing_downloads": {
+    "fields": [
+      "company_name",
+      "cik",
+      "accession_number",
+      "form_type",
+      "filed_date",
+      "url",
+      "path",
+      "source",
+      "original_path",
+      "conversion_status",
+      "conversion_error"
+    ],
+    "primary_key": "accession_number",
+    "output_example": [
+      {
+        "company_name": "Example Company",
+        "cik": "example",
+        "accession_number": "example",
+        "form_type": "example",
+        "filed_date": "2024-01-02",
+        "url": "https://www.sec.gov/Archives/edgar/data/320193/example.htm",
+        "path": "artifacts/example/result.json",
+        "source": "example_source",
+        "original_path": "artifacts/example/result.json",
+        "conversion_status": "example",
+        "conversion_error": "example"
+      }
+    ]
+  },
+  "wikipedia_search_results": {
+    "fields": [
+      "query",
+      "results",
+      "source"
+    ],
+    "primary_key": "query",
+    "output_example": {
+      "query": "Apple annual report",
+      "results": [
+        {
+          "label": "example",
+          "value": 1
+        }
+      ],
+      "source": "example_source"
+    }
+  },
+  "web_page_read_results": {
+    "fields": [
+      "query",
+      "answer",
+      "search_source",
+      "results_considered",
+      "pages_read",
+      "status",
+      "search_error"
+    ],
+    "primary_key": "query",
+    "output_example": {
+      "query": "Apple annual report",
+      "answer": "",
+      "search_source": "tavily",
+      "results_considered": 1,
+      "pages_read": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/example.htm",
+          "title": "Apple annual report",
+          "content": "Concise example content.",
+          "status": "ok"
+        }
+      ],
+      "status": "ok",
+      "search_error": ""
+    }
+  },
+  "multi_ohlcv": {
+    "fields": [
+      "symbol",
+      "date",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": {
+      "AAPL": [
+        {
+          "symbol": "AAPL",
+          "date": "2024-01-02",
+          "open": 187.15,
+          "high": 188.44,
+          "low": 183.89,
+          "close": 185.64,
+          "volume": 82488700
+        }
+      ]
+    }
+  },
+  "total_return_history": {
+    "fields": [
+      "symbol",
+      "date",
+      "close",
+      "total_return",
+      "beta",
+      "source"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "date": "2024-01-02",
+      "close": 100.25,
+      "total_return": 0.12,
+      "beta": 0.12,
+      "source": "example_source"
+    }
+  },
+  "ric_history": {
+    "fields": [
+      "ric",
+      "date",
+      "close",
+      "currency",
+      "source"
+    ],
+    "primary_key": [
+      "ric",
+      "date"
+    ],
+    "output_example": {
+      "ric": "AAPL.O",
+      "date": "2024-01-02",
+      "close": 100.25,
+      "currency": "USD",
+      "source": "example_source"
+    }
+  },
+  "correlation_matrix": {
+    "fields": [
+      "symbols",
+      "correlation",
+      "observations"
+    ],
+    "primary_key": "symbols",
+    "output_example": {
+      "symbols": [
+        "AAPL",
+        "MSFT"
+      ],
+      "correlation": 0.12,
+      "observations": 10
+    }
+  },
+  "factor_analysis": {
+    "fields": [
+      "factor",
+      "ic",
+      "rank_ic",
+      "ir",
+      "sample_count"
+    ],
+    "primary_key": "factor",
+    "output_example": {
+      "factor": "value",
+      "ic": 0.12,
+      "rank_ic": 0.12,
+      "ir": 0.12,
+      "sample_count": 10
+    }
+  },
+  "backtest_result": {
+    "fields": [
+      "strategy",
+      "start_date",
+      "end_date",
+      "total_return",
+      "max_drawdown",
+      "sharpe_ratio"
+    ],
+    "primary_key": "strategy",
+    "output_example": {
+      "strategy": "buy_and_hold",
+      "start_date": "2024-01-02",
+      "end_date": "2024-01-02",
+      "total_return": 0.12,
+      "max_drawdown": 0.12,
+      "sharpe_ratio": 0.12
+    }
+  },
+  "chart_patterns": {
+    "fields": [
+      "symbol",
+      "pattern",
+      "start_date",
+      "end_date",
+      "confidence"
+    ],
+    "primary_key": [
+      "symbol",
+      "pattern",
+      "end_date"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "pattern": "ascending_triangle",
+      "start_date": "2024-01-02",
+      "end_date": "2024-01-02",
+      "confidence": 0.12
+    }
+  },
+  "option_valuation": {
+    "fields": [
+      "symbol",
+      "option_type",
+      "strike",
+      "expiry",
+      "price",
+      "delta",
+      "gamma",
+      "vega",
+      "theta"
+    ],
+    "primary_key": [
+      "symbol",
+      "strike",
+      "expiry"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "option_type": "example",
+      "strike": 100.25,
+      "expiry": "2024-01-02",
+      "price": 100.25,
+      "delta": 0.12,
+      "gamma": 0.12,
+      "vega": 0.12,
+      "theta": 0.12
+    }
+  },
+  "volatility_surface": {
+    "fields": [
+      "underlier",
+      "expiry",
+      "strike",
+      "implied_volatility",
+      "delta"
+    ],
+    "primary_key": [
+      "underlier",
+      "expiry",
+      "strike"
+    ],
+    "output_example": {
+      "underlier": "AAPL",
+      "expiry": "2024-01-02",
+      "strike": 100.25,
+      "implied_volatility": 0.12,
+      "delta": 0.12
+    }
+  },
+  "interest_rate_curve": {
+    "fields": [
+      "curve",
+      "tenor",
+      "date",
+      "rate",
+      "currency"
+    ],
+    "primary_key": [
+      "curve",
+      "tenor",
+      "date"
+    ],
+    "output_example": {
+      "curve": "USD_OIS",
+      "tenor": "example",
+      "date": "2024-01-02",
+      "rate": 0.12,
+      "currency": "USD"
+    }
+  },
+  "fx_forward_curve": {
+    "fields": [
+      "pair",
+      "tenor",
+      "date",
+      "forward_points",
+      "forward_rate"
+    ],
+    "primary_key": [
+      "pair",
+      "tenor",
+      "date"
+    ],
+    "output_example": {
+      "pair": "EUR/USD",
+      "tenor": "example",
+      "date": "2024-01-02",
+      "forward_points": "example",
+      "forward_rate": 100.25
+    }
+  },
+  "fx_spot_forward": {
+    "fields": [
+      "pair",
+      "spot",
+      "tenor",
+      "forward_rate",
+      "date"
+    ],
+    "primary_key": [
+      "pair",
+      "tenor",
+      "date"
+    ],
+    "output_example": {
+      "pair": "EUR/USD",
+      "spot": 100.25,
+      "tenor": "example",
+      "forward_rate": 100.25,
+      "date": "2024-01-02"
+    }
+  },
+  "credit_curve": {
+    "fields": [
+      "issuer",
+      "tenor",
+      "date",
+      "spread_bps",
+      "currency"
+    ],
+    "primary_key": [
+      "issuer",
+      "tenor",
+      "date"
+    ],
+    "output_example": {
+      "issuer": "Example Company",
+      "tenor": "example",
+      "date": "2024-01-02",
+      "spread_bps": 0.12,
+      "currency": "USD"
+    }
+  },
+  "inflation_curve": {
+    "fields": [
+      "index",
+      "tenor",
+      "date",
+      "breakeven_rate",
+      "currency"
+    ],
+    "primary_key": [
+      "index",
+      "tenor",
+      "date"
+    ],
+    "output_example": {
+      "index": "US CPI",
+      "tenor": "example",
+      "date": "2024-01-02",
+      "breakeven_rate": 0.12,
+      "currency": "USD"
+    }
+  },
+  "consensus_estimates": {
+    "fields": [
+      "symbol",
+      "fiscal_period",
+      "eps_mean",
+      "revenue_mean",
+      "analyst_count",
+      "as_of_date"
+    ],
+    "primary_key": [
+      "symbol",
+      "fiscal_period"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "fiscal_period": "example",
+      "eps_mean": "example",
+      "revenue_mean": "example",
+      "analyst_count": 10,
+      "as_of_date": "2024-01-02"
+    }
+  },
+  "earnings_event": {
+    "fields": [
+      "symbol",
+      "date",
+      "event_type",
+      "eps_estimate",
+      "eps_actual",
+      "source"
+    ],
+    "primary_key": [
+      "symbol",
+      "date"
+    ],
+    "output_example": {
+      "symbol": "AAPL",
+      "date": "2024-01-02",
+      "event_type": "example",
+      "eps_estimate": "example",
+      "eps_actual": "example",
+      "source": "example_source"
+    }
+  },
+  "bond_price": {
+    "fields": [
+      "instrument",
+      "price",
+      "yield_to_maturity",
+      "duration",
+      "convexity",
+      "as_of_date"
+    ],
+    "primary_key": "instrument",
+    "output_example": {
+      "instrument": "US91282CJY84",
+      "price": 100.25,
+      "yield_to_maturity": 0.12,
+      "duration": 0.12,
+      "convexity": 0.12,
+      "as_of_date": "2024-01-02"
+    }
+  },
+  "bond_future_price": {
+    "fields": [
+      "instrument",
+      "price",
+      "yield",
+      "ctd_instrument",
+      "as_of_date"
+    ],
+    "primary_key": "instrument",
+    "output_example": {
+      "instrument": "US91282CJY84",
+      "price": 100.25,
+      "yield": 0.12,
+      "ctd_instrument": "example",
+      "as_of_date": "2024-01-02"
+    }
+  },
+  "bond_reference": {
+    "fields": [
+      "instrument",
+      "issuer",
+      "coupon",
+      "maturity_date",
+      "currency",
+      "rating"
+    ],
+    "primary_key": "instrument",
+    "output_example": {
+      "instrument": "US91282CJY84",
+      "issuer": "Example Company",
+      "coupon": "example",
+      "maturity_date": "2024-01-02",
+      "currency": "USD",
+      "rating": "example"
+    }
+  },
+  "bond_cashflow": {
+    "fields": [
+      "instrument",
+      "payment_date",
+      "coupon_amount",
+      "principal_amount",
+      "currency"
+    ],
+    "primary_key": [
+      "instrument",
+      "payment_date"
+    ],
+    "output_example": [
+      {
+        "instrument": "US91282CJY84",
+        "payment_date": "2024-01-02",
+        "coupon_amount": "example",
+        "principal_amount": "example",
+        "currency": "USD"
+      }
+    ]
+  },
+  "bond_scenario": {
+    "fields": [
+      "instrument",
+      "shock_bps",
+      "price_change_pct",
+      "yield_to_maturity",
+      "as_of_date"
+    ],
+    "primary_key": [
+      "instrument",
+      "shock_bps"
+    ],
+    "output_example": {
+      "instrument": "US91282CJY84",
+      "shock_bps": "example",
+      "price_change_pct": 0.12,
+      "yield_to_maturity": 0.12,
+      "as_of_date": "2024-01-02"
+    }
+  },
+  "fixed_income_risk": {
+    "fields": [
+      "instrument",
+      "oas_bps",
+      "effective_duration",
+      "key_rate_duration",
+      "convexity",
+      "as_of_date"
+    ],
+    "primary_key": "instrument",
+    "output_example": {
+      "instrument": "US91282CJY84",
+      "oas_bps": 0.12,
+      "effective_duration": 0.12,
+      "key_rate_duration": 0.12,
+      "convexity": 0.12,
+      "as_of_date": "2024-01-02"
+    }
+  },
+  "swap_price": {
+    "fields": [
+      "instrument",
+      "par_rate",
+      "npv",
+      "dv01",
+      "currency",
+      "as_of_date"
+    ],
+    "primary_key": "instrument",
+    "output_example": {
+      "instrument": "US91282CJY84",
+      "par_rate": 100.25,
+      "npv": 100.25,
+      "dv01": 0.12,
+      "currency": "USD",
+      "as_of_date": "2024-01-02"
+    }
+  },
+  "news_sentiment": {
+    "fields": [
+      "symbol",
+      "sentiment_score",
+      "buzz",
+      "article_count",
+      "as_of_date",
+      "source"
+    ],
+    "primary_key": "symbol",
+    "output_example": {
+      "symbol": "AAPL",
+      "sentiment_score": 0.12,
+      "buzz": "example",
+      "article_count": 10,
+      "as_of_date": "2024-01-02",
+      "source": "example_source"
+    }
+  },
+  "symbol_resolution": {
+    "fields": [
+      "query",
+      "symbol",
+      "name",
+      "exchange",
+      "region",
+      "confidence"
+    ],
+    "primary_key": "symbol",
+    "output_example": {
+      "query": "Apple annual report",
+      "symbol": "AAPL",
+      "name": "Example Company",
+      "exchange": "NASDAQ",
+      "region": "US",
+      "confidence": 0.12
+    }
+  },
+  "market_series_summary": {
+    "fields": [
+      "symbol",
+      "observations",
+      "average_volume",
+      "median_volume",
+      "annualized_volatility",
+      "max_drawdown",
+      "actual_min_date",
+      "actual_max_date"
+    ],
+    "primary_key": "symbol",
+    "output_example": {
+      "symbol": "AAPL",
+      "observations": 250,
+      "average_volume": 1000000,
+      "median_volume": 950000,
+      "annualized_volatility": 0.25,
+      "max_drawdown": -0.15,
+      "actual_min_date": "2024-01-02",
+      "actual_max_date": "2024-12-31"
+    }
+  },
+  "exact_price": {
+    "fields": [
+      "symbol",
+      "requested_date",
+      "actual_date",
+      "is_exact_date",
+      "selected_price",
+      "close",
+      "adj_close"
+    ],
+    "primary_key": [
+      "symbol",
+      "requested_date"
+    ],
+    "output_example": {
+      "symbol": "NFLX",
+      "requested_date": "2024-02-02",
+      "actual_date": "2024-02-02",
+      "is_exact_date": true,
+      "selected_price": 100.25,
+      "close": 100.25,
+      "adj_close": 100.25
+    }
+  },
+  "statement_fields": {
+    "fields": [
+      "status",
+      "symbol",
+      "statement",
+      "values",
+      "missing_fields",
+      "periods",
+      "tag_provenance"
+    ],
+    "primary_key": [
+      "symbol",
+      "periods"
+    ],
+    "output_example": {
+      "status": "success",
+      "symbol": "TSLA",
+      "statement": "income",
+      "values": {
+        "revenue": 100.25,
+        "operating_income": 100.25
+      },
+      "missing_fields": [],
+      "periods": [
+        {
+          "period_end": "2023-12-31",
+          "fiscal_year": 2023,
+          "fiscal_period": "FY"
+        }
+      ],
+      "tag_provenance": {
+        "revenue": "RevenueFromContractWithCustomerExcludingAssessedTax"
+      }
+    }
+  },
+  "corporate_actions": {
+    "fields": [
+      "status",
+      "symbol",
+      "events",
+      "missing_event_types"
+    ],
+    "primary_key": [
+      "symbol",
+      "events"
+    ],
+    "output_example": {
+      "status": "success",
+      "symbol": "NVDA",
+      "events": [
+        {
+          "event_type": "split",
+          "date": "2024-06-10",
+          "ratio": "10:1"
+        }
+      ],
+      "missing_event_types": []
+    }
+  }
+}
