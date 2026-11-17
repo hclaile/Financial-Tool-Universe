@@ -60,7 +60,155 @@ The core installation registers all 116 tools and supports local CSV/JSON-to-Par
 .venv/bin/python -m pip install -e '.[qlib,crawlers,research,training]'
 ```
 
-The `train_qcm`, `train_AFF`, `train_*_AlphaSAGE`, and `qlib_benchmark_runner` tools launch external research projects configured under `paths` as background tasks. Each launch returns a `task_id`; poll it with `training_get_task` and list all tasks with `training_list_tasks`. Those projects, model weights, and market data are not bundled, so clone each project into the configured path (or set its `FTU_*_REPO` variable) before calling its trainer. The former `backtest` tool is now `backtest_model_predictions`.
+The `train_qcm`, `train_AFF`, `train_*_AlphaSAGE`, and `qlib_benchmark_runner` tools launch external research projects configured under `paths` as background tasks. Each launch returns a `task_id`; poll it with `training_get_task` and list all tasks with `training_list_tasks`. Those projects, model weights, and market data are not bundled, so clone each project into the configured path (or set its `FTU_*_REPO` variable) before calling its trainer. See [Training and backtesting](#training-and-backtesting--quick-start) below for a working setup. The former `backtest` tool is now `backtest_model_predictions`.
+
+## Training and backtesting — quick start
+
+There are two kinds of training tools, and they need different setup.
+
+### 1. `train` — self-contained, works out of the box
+
+`train` runs a local scikit-learn RandomForest over a Qlib dataset or a prepared
+Parquet file. No external repository is required.
+
+```bash
+# Install the Qlib extras in your environment
+.venv/bin/python -m pip install -e '.[qlib]'
+```
+
+Prepare input data one of two ways, then call `train` with a config file:
+
+**Option A — Qlib dataset.** Download it first, then train against its handler:
+
+```jsonc
+// call tool: data_download
+{"market": "cn", "provider_uri": "data/qlib/cn_data"}
+```
+
+```yaml
+# configs/train.yaml
+provider_uri: data/qlib/cn_data
+region: cn
+start_time: "2015-01-01"
+end_time: "2019-12-31"
+instruments: csi300
+features: ["$close", "$open", "$high", "$low", "$volume"]
+label: "Ref($close, -1)/$close - 1"
+segments:
+  train: ["2015-01-01", "2019-12-31"]
+```
+
+```jsonc
+// call tool: train
+{"config": "configs/train.yaml", "model_path": "output/model.pkl"}
+```
+
+**Option B — a pre-built Parquet** with a `(datetime, instrument)` MultiIndex:
+
+```yaml
+# configs/train.yaml
+raw_parquet: data/features.parquet
+feature_cols: ["open", "high", "low", "close", "volume"]
+label_col: "next_return"
+```
+
+```jsonc
+// call tool: train
+{"config": "configs/train.yaml", "model_path": "output/model.pkl"}
+```
+
+`train` blocks until the model is saved to `model_path`.
+
+### 2. `train_qcm` / `train_AFF` / `train_*_AlphaSAGE` — launchers for external projects
+
+These run training scripts from three external research repositories that are
+**not bundled** and are **not published here**. They are launchers, not the
+training algorithms themselves: you must already have access to each project and
+clone it yourself.
+
+| Tool | Script it launches | Config key (default) | Override env var |
+| --- | --- | --- | --- |
+| `train_qcm` | `train_qcm.py` | `paths.alphaqcm_repo` (`external/AlphaQCM`) | `FTU_ALPHAQCM_REPO` |
+| `train_AFF` | `train_AFF.py` | `paths.alphaforge_repo` (`external/AlphaForge`) | `FTU_ALPHAFORGE_REPO` |
+| `train_gfn_AlphaSAGE` | `train_gfn.py` | `paths.alphasage_repo` (`external/AlphaSAGE`) | `FTU_ALPHASAGE_REPO` |
+| `train_GP_AlphaSAGE` | `train_GP.py` | `paths.alphasage_repo` (`external/AlphaSAGE`) | `FTU_ALPHASAGE_REPO` |
+| `train_PPO_AlphaSAGE` | `train_ppo.py` | `paths.alphasage_repo` (`external/AlphaSAGE`) | `FTU_ALPHASAGE_REPO` |
+
+```bash
+# Clone each project you use into the default paths (substitute your repo URLs),
+# then install each project's own dependencies as its README instructs.
+mkdir -p external
+git clone <your-alphaqcm-url> external/AlphaQCM
+git clone <your-alphaforge-url> external/AlphaForge
+git clone <your-alphasage-url> external/AlphaSAGE
+```
+
+If you keep the projects elsewhere, set the override variable instead of the
+default path — for example `export FTU_ALPHASAGE_REPO=/opt/research/AlphaSAGE`.
+
+Launching returns immediately with a `task_id`:
+
+```jsonc
+// call tool: train_gfn_AlphaSAGE
+{"config_params": {"encoder_type": "gnn", "n_episodes": 10000}, "task_name": "gnn_run_1"}
+```
+
+Then poll:
+
+```jsonc
+// call tool: training_get_task
+{"task_id": "6f2e1b3a-9c41-4e72-9a11-8a3dd21cb004", "tail": 50}
+// call tool: training_list_tasks
+{}
+```
+
+`training_get_task` reports one of `running`, `completed`, `failed`, or
+`not_found`, along with the exit code, pid, error text, and recent log lines. If
+a repository is missing, the launch tool raises a `FileNotFoundError` naming the
+path to create and the `FTU_*_REPO` variable to set — it never leaves a silent
+dangling task.
+
+### 3. Qlib benchmark runners
+
+`qlib_benchmark_list_models` scans the benchmark directory for `workflow_config_*.yaml`
+files. `qlib_benchmark_runner` launches one through `python -m qlib.cli.run`:
+
+```bash
+.venv/bin/python -m pip install -e '.[qlib]'
+git clone <your-qlib-benchmark-url> external/qlib_benchmark   # or set FTU_QLIB_BENCHMARKS
+```
+
+```jsonc
+// call tool: qlib_benchmark_runner
+{"yaml_path": "external/qlib_benchmark/benchmarks/XGBoost/workflow_config_xgboost_Alpha158.yaml",
+ "provider_uri": "data/qlib/cn_data",
+ "experiment_name": "xgboost_alpha158"}
+```
+
+It returns a `task_id`; poll it with `training_get_task` as above.
+
+### 4. Backtesting a trained model
+
+Once you have a prediction file (a `(datetime, instrument)` MultiIndex CSV or
+Parquet with a `score` and a `label` column), `backtest_model_predictions` writes
+its Top-K portfolio metrics to `backtest_metrics.json`:
+
+```yaml
+# configs/backtest.yaml
+pred_path: predictions/pred.csv          # or your .parquet
+score_col: score
+label_col: label
+topk: 50
+output: output
+```
+
+```jsonc
+// call tool: backtest_model_predictions
+{"config": "configs/backtest.yaml"}
+```
+
+The result file `output/backtest_metrics.json` contains cumulative and annual
+return, annualized volatility, Sharpe ratio, and the number of periods.
 
 ## Structure and validation
 
