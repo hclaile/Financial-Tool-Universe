@@ -2902,7 +2902,7 @@
     },
     {
       "name": "news_get_headlines",
-      "description": "Get financial news headlines by query or symbol. Supported regions: US. Availability, coverage, freshness, and entitlement depend on the configured source. Symbol inputs require canonical provider-ready ticker identifiers; resolve company names before calling.",
+      "description": "Get financial news headlines by query or symbol. Supported regions: CN, US. Availability, coverage, freshness, and entitlement depend on the configured source. Symbol inputs require canonical provider-ready ticker identifiers; resolve company names before calling.",
       "group": "news",
       "input_schema": {
         "properties": {
@@ -5495,7 +5495,7 @@
     },
     {
       "name": "technical_detect_patterns",
-      "description": "Compute full per-date technical series and pattern events from OHLCV. Accept exactly one upstream CSV or JSON artifact through input_data_path (legacy input_csv_path/input_json_path also work), so a downstream task can reuse market data instead of downloading it again. The output CSV and series include common SMA windows (5/10/20/50/60/100/200), EMA windows (9/12/20/26/50), RSI-14, MACD, Bollinger bands and volatility; sma_windows/ema_windows add requested windows. Indicators are calculated before the requested date range is cut, preserving warm-up history for values such as SMA-50. Symbol inputs require canonical provider-ready ticker identifiers; resolve company names before calling.",
+      "description": "Compute full per-date technical series and pattern events from OHLCV. Accept exactly one upstream CSV or JSON artifact through input_data_path (legacy input_csv_path/input_json_path also work), so a downstream task can reuse market data instead of downloading it again. The output CSV and series include common SMA windows (5/10/20/50/60/100/200), EMA windows (9/12/20/26/50), RSI-14, MACD, Bollinger bands and volatility; sma_windows/ema_windows add requested windows; when sma_windows is omitted, an additional sma_<lookback> window is added. Indicators are calculated before the requested date range is cut, preserving warm-up history for values such as SMA-50. Symbol inputs require canonical provider-ready ticker identifiers; resolve company names before calling.",
       "group": "technical",
       "input_schema": {
         "properties": {
@@ -5783,43 +5783,28 @@
             "description": "Calculated option price."
           },
           "delta": {
-            "type": [
-              "number",
-              "null"
-            ],
-            "description": "Calculated delta; null when undefined."
+            "type": "number",
+            "description": "Calculated Black-Scholes Greek."
           },
           "gamma": {
-            "type": [
-              "number",
-              "null"
-            ],
-            "description": "Calculated gamma; null when undefined."
+            "type": "number",
+            "description": "Calculated Black-Scholes Greek."
           },
           "theta": {
-            "type": [
-              "number",
-              "null"
-            ],
-            "description": "Calculated theta; null when undefined."
+            "type": "number",
+            "description": "Calculated Black-Scholes Greek."
           },
           "vega": {
-            "type": [
-              "number",
-              "null"
-            ],
-            "description": "Calculated vega; null when undefined."
+            "type": "number",
+            "description": "Calculated Black-Scholes Greek."
           },
           "rho": {
-            "type": [
-              "number",
-              "null"
-            ],
-            "description": "Calculated rho; null when undefined."
+            "type": "number",
+            "description": "Calculated Black-Scholes Greek."
           },
           "method": {
             "type": "string",
-            "description": "Pricing method."
+            "description": "Pricing method; always \"black_scholes\"."
           }
         },
         "additionalProperties": true
@@ -7518,7 +7503,7 @@
     },
     {
       "name": "backtest_model_predictions",
-      "description": "Backtest Qlib model predictions or configured Parquet data and write return metrics to backtest_metrics.json in the configured output directory.",
+      "description": "Backtest Qlib model predictions or configured Parquet data and write return metrics to backtest_metrics.json in the configured output directory. Annualization uses 252 periods by default and can be overridden with periods_per_year (or annualization_periods) in the configuration file.",
       "group": "backtesting",
       "input_schema": {
         "properties": {
