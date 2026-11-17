@@ -238,7 +238,3 @@ The integration tests connect through MCP stdio, check the 116-tool registry, ca
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
-## Security
-
-Keep credentials out of Git. `config.yaml` holds your real API keys and is ignored by Git; never commit it. If a credential was ever committed or exposed, rotate it immediately in the provider's console.
