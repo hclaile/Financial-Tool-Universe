@@ -47,3 +47,15 @@ include = ["finance_tool_universe*", "financial_tool*"]
 testpaths = ["tests"]
 pythonpath = ["src"]
 asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+# Enforce the deterministic, high-signal pycodestyle/pyflakes checks.  F541
+# (f-string noise) and F841 (unused locals) are legacy cosmetic noise in the
+# research tools; F821 (undefined name), E722 (bare except), E402 (misplaced
+# import), W291/W292/W293 (whitespace) still run and catch real defects.
+select = ["E", "F", "W"]
+ignore = ["E501", "F401", "F541", "F841"]

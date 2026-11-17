@@ -3,6 +3,7 @@ Balance Sheet, Cash Flow) and News & Sentiments."""
 
 from __future__ import annotations
 
+import logging
 import os
 from typing import Any
 
@@ -10,6 +11,8 @@ import httpx
 
 from .base import BaseConnector, register_connector
 from ._numeric import safe_float, safe_int
+
+logger = logging.getLogger("financial_tool.connector.alphavantage")
 
 _BASE_URL = "https://www.alphavantage.co/query"
 

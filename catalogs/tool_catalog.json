@@ -3468,7 +3468,7 @@
             "default": 14,
             "title": "Lookback",
             "type": "integer",
-            "description": "Accepted by the public signature; the current implementation does not use this value."
+            "description": "Number of most recent daily returns used per symbol; must be at least 5."
           },
           "region": {
             "default": "US",
@@ -3534,6 +3534,10 @@
           "method": {
             "type": "string",
             "description": "VaR calculation method."
+          },
+          "lookback": {
+            "type": "integer",
+            "description": "Return window actually applied per symbol."
           }
         },
         "additionalProperties": true
@@ -5140,10 +5144,17 @@
             "title": "End Date"
           },
           "lookback": {
-            "default": 14,
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
             "title": "Lookback",
-            "type": "integer",
-            "description": "Accepted by the public signature; the current implementation does not use this value."
+            "description": "Optional number of most recent daily returns to use per symbol; null uses the full window."
           },
           "interval": {
             "default": "1d",
@@ -5539,7 +5550,8 @@
           "lookback": {
             "default": 14,
             "title": "Lookback",
-            "type": "integer"
+            "type": "integer",
+            "description": "Default fast-moving-average window added when sma_windows is not supplied."
           },
           "patterns": {
             "default": "all",
@@ -5549,7 +5561,8 @@
           "window": {
             "default": 10,
             "title": "Window",
-            "type": "integer"
+            "type": "integer",
+            "description": "Reserved for pattern sizing; the current implementation does not use this value."
           },
           "region": {
             "default": "US",
@@ -5733,7 +5746,8 @@
           },
           "expiry_days": {
             "title": "Expiry Days",
-            "type": "integer"
+            "type": "integer",
+            "description": "Time to expiry in days; must be positive."
           },
           "risk_free_rate": {
             "default": 0.03,
@@ -5748,7 +5762,8 @@
           "option_type": {
             "default": "call",
             "title": "Option Type",
-            "type": "string"
+            "type": "string",
+            "description": "Option type: 'call' or 'put'."
           }
         },
         "required": [

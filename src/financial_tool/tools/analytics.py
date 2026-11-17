@@ -311,7 +311,7 @@ def register(mcp) -> None:
         symbols: list[str],
         start_date: str | None = None,
         end_date: str | None = None,
-        lookback: int = 14,
+        lookback: int | None = None,
         interval: str = "1d",
         region: str = "US",
     ) -> dict:
@@ -328,7 +328,11 @@ def register(mcp) -> None:
                 interval=interval,
             )
             histories[symbol] = history
-            returns[symbol] = _returns_by_date(history)
+            symbol_returns = _returns_by_date(history)
+            if lookback is not None and lookback > 0:
+                dates = sorted(symbol_returns)[-lookback:]
+                symbol_returns = {date: symbol_returns[date] for date in dates}
+            returns[symbol] = symbol_returns
 
         matrix: dict[str, dict[str, float | None]] = {}
         observations: dict[str, dict[str, int]] = {}

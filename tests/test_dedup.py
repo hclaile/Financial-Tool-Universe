@@ -323,3 +323,120 @@ def test_reddit_keeps_posts_and_top_comments(monkeypatch, tmp_path):
     assert json.loads(output.read_text()) == result["posts"]
     schema = next(t["output_schema"] for t in catalog() if t["name"] == "crawler_reddit_extractor")
     jsonschema.validate(result, schema)
+
+
+def test_risk_var_excludes_missing_symbols_and_bounds_lookback(monkeypatch):
+    """Symbols with no data must not drag down the equal-weight portfolio, and
+    ``lookback`` must actually bound the return window used."""
+    import asyncio as _asyncio
+
+    from financial_tool.tools import risk as risk_module
+    from financial_tool.registration import create_tool_server
+
+    async def fake_fetch(data_type, action, region, symbol, **kwargs):
+        if symbol in ("AAPL", "MSFT"):
+            return [{"date": f"2024-01-{d:02d}", "close": 100 + d} for d in range(1, 21)]
+        raise Exception("no data")
+
+    monkeypatch.setattr(risk_module, "fetch_with_failover", fake_fetch)
+    manager = create_tool_server()._tool_manager
+    result = _asyncio.run(manager.call_tool(
+        "risk_get_var",
+        {"portfolio": ["AAPL", "MSFT", "UNKNOWN"], "lookback": 6, "confidence": 0.95},
+        convert_result=False,
+    ))
+    assert result["status"] == "success"
+    # The window used is 6 dates (lookback), not the full 19 returns.
+    assert result["observations"] == 6
+    assert result["method"] == "parametric_variance_covariance"
+
+
+def test_risk_var_rejects_bad_confidence(monkeypatch):
+    import asyncio as _asyncio
+    import pytest as _pytest
+
+    from financial_tool.registration import create_tool_server
+    from mcp.server.fastmcp.exceptions import ToolError
+
+    manager = create_tool_server()._tool_manager
+    with _pytest.raises(ToolError, match="confidence must be one of"):
+        _asyncio.run(manager.call_tool(
+            "risk_get_var", {"portfolio": ["AAPL"], "confidence": 0.999},
+            convert_result=False,
+        ))
+
+
+def test_derivatives_price_option_rejects_invalid_type_and_date():
+    import asyncio as _asyncio
+    import pytest as _pytest
+
+    from financial_tool.registration import create_tool_server
+    from mcp.server.fastmcp.exceptions import ToolError
+
+    manager = create_tool_server()._tool_manager
+    with _pytest.raises(ToolError, match="option_type must be"):
+        _asyncio.run(manager.call_tool(
+            "derivatives_price_option",
+            {"spot": 100, "strike": 100, "expiry_days": 30, "option_type": "straddle"},
+            convert_result=False,
+        ))
+    with _pytest.raises(ToolError, match="expiry_days must be"):
+        _asyncio.run(manager.call_tool(
+            "derivatives_price_option",
+            {"spot": 100, "strike": 100, "expiry_days": 0},
+            convert_result=False,
+        ))
+
+
+def test_derivatives_price_option_matches_call_put_parity():
+    import asyncio as _asyncio
+
+    from financial_tool.registration import create_tool_server
+
+    manager = create_tool_server()._tool_manager
+    args = {"spot": 100, "strike": 100, "expiry_days": 30,
+            "risk_free_rate": 0.03, "volatility": 0.25}
+    call = _asyncio.run(manager.call_tool(
+        "derivatives_price_option", {**args, "option_type": "call"}, convert_result=False))
+    put = _asyncio.run(manager.call_tool(
+        "derivatives_price_option", {**args, "option_type": "put"}, convert_result=False))
+    # Put-call parity: C - P = S - K*e^(-rT)
+    import math
+    T = 30 / 365.0
+    parity = call["price"] - put["price"] - (100 - 100 * math.exp(-0.03 * T))
+    assert abs(parity) < 1e-4
+
+
+def test_search_read_url_guards_block_private_targets():
+    import asyncio as _asyncio
+
+    from financial_tool.tools import search
+
+    for bad in (
+        "http://127.0.0.1/x",
+        "http://[::1]/x",
+        "http://10.0.0.1/x",
+        "http://192.168.1.1/x",
+        "http://169.254.1.1/x",
+        "http://localhost/x",
+        "http://user:pass@example.com/x",
+        "ftp://example.com/x",
+    ):
+        allowed, _ = search._url_allowed(bad)
+        assert not allowed, f"{bad} must be rejected"
+
+    assert search._url_allowed("https://example.com/x")[0] is True
+    assert _asyncio.run(search._host_resolves_to_public("localhost")) is False
+    assert _asyncio.run(search._host_resolves_to_public("127.0.0.1")) is False
+
+
+def test_search_read_url_rejects_private_dns(monkeypatch):
+    import asyncio as _asyncio
+
+    from financial_tool.tools import search
+
+    def fake_getaddrinfo(host, port, *args, **kwargs):
+        return [(search.socket.AF_INET, search.socket.SOCK_STREAM, 6, "", ("192.168.1.10", 0))]
+
+    monkeypatch.setattr(search.socket, "getaddrinfo", fake_getaddrinfo)
+    assert _asyncio.run(search._host_resolves_to_public("internal.example")) is False

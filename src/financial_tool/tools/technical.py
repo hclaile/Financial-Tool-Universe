@@ -277,9 +277,15 @@ def register(mcp) -> None:
             frame = pd.DataFrame(rows or [])
             source = "regional_ohlcv_failover"
         frame = _normalize_ohlcv_frame(frame)
+        if sma_windows:
+            resolved_sma = list(sma_windows)
+        else:
+            # `lookback` is the default fast-moving-average window so the public
+            # parameter has an effect (sma_5/sma_20 remain derived constants).
+            resolved_sma = [5, 20, lookback]
         indicator_frame = compute_technical_indicator_frame(
             frame,
-            sma_windows=sma_windows,
+            sma_windows=resolved_sma,
             ema_windows=ema_windows,
         )
         if indicator_frame.empty:

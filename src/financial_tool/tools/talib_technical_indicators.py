@@ -305,7 +305,7 @@ def _convert_timestamps_to_strings(df: pd.DataFrame) -> pd.DataFrame:
                                     dt = pd.to_datetime(x)
                                     if not pd.isna(dt):
                                         return dt.strftime('%Y-%m-%d')
-                                except:
+                                except (ValueError, TypeError, OverflowError):
                                     pass
                         return x
 

@@ -25,7 +25,8 @@ def register(mcp) -> None:
     ) -> list[dict]:
         """Get financial news headlines from the highest-priority source.
 
-        Sources are tried in order: Alpha Vantage → Finnhub → NewsAPI → Alpaca.
+        US regions try: Alpha Vantage → Finnhub → NewsAPI → Alpaca.
+        CN regions route to AKShare.
         """
         return await fetch_with_failover(
             "news_list",

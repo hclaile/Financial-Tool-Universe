@@ -16,10 +16,9 @@ import httpx
 import yaml
 
 from ..errors import SourceUnavailableError, UnsupportedRegionError
+from finance_tool_universe.config import catalog_dir
 
 logger = logging.getLogger("financial_tool.connector")
-
-from finance_tool_universe.config import catalog_dir
 
 CATALOGS_DIR = catalog_dir()
 
@@ -726,6 +725,11 @@ async def fetch_with_failover(
             logger.warning("Source %s not registered, skipping", source_name)
             continue
 
+        # A source attempt should trip the circuit breaker exactly once, and
+        # only when a real call failed.  Empty results and generic errors fall
+        # through to the trailing record below; deterministic no-retry paths
+        # (TypeError, SourceUnavailableError) set this and record inline.
+        record_failure = True
         for attempt in range(max_retries + 1):
             try:
                 request_kwargs = expand_temporal_limit_kwargs(kwargs)
@@ -758,6 +762,7 @@ async def fetch_with_failover(
                         data_type,
                         action,
                     )
+                    record_failure = False
                     break
                 _breaker.record_success(source_name)
                 if source_name == "yfinance":
@@ -779,6 +784,7 @@ async def fetch_with_failover(
                     "Source %s TypeError (no retry): %s", source_name, exc,
                 )
                 _breaker.record_failure(source_name)
+                record_failure = False
                 break  # Skip remaining retries — TypeError won't resolve
             except SourceUnavailableError as exc:
                 errors.append(f"{source_name}(attempt {attempt + 1}): {str(exc)}")
@@ -793,8 +799,10 @@ async def fetch_with_failover(
                 logger.info(
                     "Source %s unavailable (no retry): %s", source_name, exc,
                 )
-                # The common post-loop circuit-breaker update records this
-                # source failure exactly once before failover continues.
+                # A deterministic unavailability (e.g. non-JSON response) is not
+                # a transient failure worth tripping the breaker over; skip it
+                # and let failover continue without poisoning the source.
+                record_failure = False
                 break
             except Exception as exc:
                 rate_limited = _is_rate_limited_error(exc)
@@ -825,7 +833,8 @@ async def fetch_with_failover(
                         _retry_delay_for_source(source_name, retry_delay, fo_cfg)
                     )
 
-        _breaker.record_failure(source_name)
+        if record_failure:
+            _breaker.record_failure(source_name)
 
     reason = "All sources failed: " + "; ".join(str(error) for error in errors)
     logger.error(

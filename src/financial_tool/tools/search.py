@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import asyncio
 import ipaddress
 import logging
+import socket
 from datetime import datetime, timezone
 from urllib.parse import urlsplit
 
@@ -17,6 +19,17 @@ logger = logging.getLogger("financial_tool.tools.search")
 _JINA_PREFIX = "https://r.jina.ai/"
 _READ_TIMEOUT = 30
 _MAX_PAGE_CHARS = 8000
+
+
+def _ip_allowed(address: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
+    return not (
+        address.is_private
+        or address.is_loopback
+        or address.is_link_local
+        or address.is_multicast
+        or address.is_reserved
+        or address.is_unspecified
+    )
 
 
 def _url_allowed(url: str) -> tuple[bool, str]:
@@ -36,23 +49,46 @@ def _url_allowed(url: str) -> tuple[bool, str]:
     if host == "localhost" or host.endswith(".localhost") or host.endswith(".local"):
         return False, "target URL is not allowed"
 
-    ip_host = host.split("%", 1)[0]
+    # Literal IPs (including IPv6 notation) are checked immediately; hostnames
+    # are additionally resolved in ``_host_resolves_to_public`` before fetching.
+    literal_ip = host.split("%", 1)[0]
     try:
-        ip = ipaddress.ip_address(ip_host)
+        address = ipaddress.ip_address(literal_ip)
     except ValueError:
         return True, ""
-
-    if (
-        ip.is_private
-        or ip.is_loopback
-        or ip.is_link_local
-        or ip.is_multicast
-        or ip.is_reserved
-        or ip.is_unspecified
-        or not ip.is_global
-    ):
+    if not (_ip_allowed(address) and address.is_global):
         return False, "target URL is not allowed"
     return True, ""
+
+
+async def _host_resolves_to_public(host: str) -> bool:
+    """Resolve *host* and return False if any address is non-global.
+
+    ``_url_allowed`` only inspects the literal host string, so a name that
+    resolves to a loopback / private / link-local address would otherwise slip
+    through (including DNS-rebinding tricks).  Resolve here and reject the host
+    if every address is not a public, global address.
+    """
+    host = host.rstrip(".").lower()
+    try:
+        infos = await asyncio.to_thread(
+            socket.getaddrinfo, host, None, type=socket.SOCK_STREAM
+        )
+    except (socket.gaierror, OSError):
+        return False
+    addresses = {
+        info[4][0].split("%", 1)[0] for info in infos if info and len(info) >= 5
+    }
+    if not addresses:
+        return False
+    for raw in addresses:
+        try:
+            address = ipaddress.ip_address(raw)
+        except ValueError:
+            return False
+        if not (_ip_allowed(address) and address.is_global):
+            return False
+    return True
 
 
 def _extract_title(markdown: str) -> str:
@@ -68,8 +104,12 @@ async def _read_url_as_markdown(url: str, max_chars: int = _MAX_PAGE_CHARS) -> d
     if not allowed:
         return {"status": "error", "url": target_url, "error": error}
 
+    host = urlsplit(target_url).hostname or ""
+    if not await _host_resolves_to_public(host):
+        return {"status": "error", "url": target_url, "error": "target host does not resolve to a public address"}
+
     try:
-        async with httpx.AsyncClient(timeout=_READ_TIMEOUT) as client:
+        async with httpx.AsyncClient(timeout=_READ_TIMEOUT, follow_redirects=False) as client:
             resp = await client.get(
                 f"{_JINA_PREFIX}{target_url}",
                 headers={"Accept": "text/markdown"},

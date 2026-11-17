@@ -23,18 +23,17 @@ def register(mcp) -> None:
         volatility: float = 0.25,
         option_type: str = "call",
     ) -> dict:
-        t = max(expiry_days, 0) / 365.0
-        if spot <= 0 or strike <= 0 or volatility <= 0 or t <= 0:
-            intrinsic = max(spot - strike, 0.0) if option_type == "call" else max(strike - spot, 0.0)
-            return {
-                "price": round(intrinsic, 6),
-                "delta": None,
-                "gamma": None,
-                "theta": None,
-                "vega": None,
-                "rho": None,
-                "method": "intrinsic_value",
-            }
+        normalized_type = str(option_type).strip().lower()
+        if normalized_type not in {"call", "put"}:
+            raise ValueError("option_type must be 'call' or 'put'")
+        if spot <= 0 or strike <= 0:
+            raise ValueError("spot and strike must be positive")
+        if volatility <= 0:
+            raise ValueError("volatility must be positive")
+        if expiry_days <= 0:
+            raise ValueError("expiry_days must be a positive number of days")
+
+        t = expiry_days / 365.0
 
         d1 = (math.log(spot / strike) + (risk_free_rate + 0.5 * volatility**2) * t) / (
             volatility * math.sqrt(t)
@@ -42,7 +41,7 @@ def register(mcp) -> None:
         d2 = d1 - volatility * math.sqrt(t)
         pdf_d1 = math.exp(-0.5 * d1**2) / math.sqrt(2 * math.pi)
 
-        if option_type == "put":
+        if normalized_type == "put":
             price = strike * math.exp(-risk_free_rate * t) * _norm_cdf(-d2) - spot * _norm_cdf(-d1)
             delta = _norm_cdf(d1) - 1
             theta = (

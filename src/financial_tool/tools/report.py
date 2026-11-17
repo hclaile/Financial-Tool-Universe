@@ -265,7 +265,7 @@ def _safe_load_json(content: str) -> Optional[Union[Dict, List]]:
     try:
         import ast
         return ast.literal_eval(content)
-    except:
+    except (ValueError, SyntaxError):
         pass
 
     # 3. Last resort: simple quote replacement (only when it looks like a dictionary))
@@ -274,7 +274,7 @@ def _safe_load_json(content: str) -> Optional[Union[Dict, List]]:
         # This is a very rough heuristic method
         fixed_content = content.replace("'", '"')
         return json.loads(fixed_content)
-    except:
+    except (json.JSONDecodeError, TypeError):
         pass
 
     return None
@@ -492,121 +492,6 @@ def _format_inline_markdown(text: str) -> str:
     text = re.sub(r"\u200C\u200DMD_PLACEHOLDER_[\d_\-]+\u200D\u200C", "", text)
 
     return text
-
-    # Escape HTML special characters but preserve Markdown markers
-    # We need to process Markdown markers first, then escape
-    # Strategy: extract Markdown markers, escape the text, then restore the markers
-
-    # Save placeholders for Markdown markers
-    # Use a safer placeholder format: invisible characters and unique identifiers to avoid conflicts with normal text
-    placeholders = {}
-    placeholder_counter = 0
-
-    # Use zero-width non-joiner (U+200C) and zero-width joiner (U+200D) as placeholder separators
-    # These characters remain unchanged after HTML escaping and do not render visibly
-    PLACEHOLDER_PREFIX = '\u200C\u200DMD_PLACEHOLDER_'
-    PLACEHOLDER_SUFFIX = '\u200D\u200C'
-
-    def _create_placeholder(content):
-        nonlocal placeholder_counter
-        # Generate a unique identifier using timestamp + random number + counter to ensure placeholder uniqueness
-        # Use zero-width characters as separators to avoid conflicts with normal text, and remain identifiable after HTML escaping
-        timestamp = int(time.time() * 1000000)  # Microsecond timestamp
-        random_id = random.randint(10000, 99999)
-        unique_id = f"{timestamp}_{random_id}_{placeholder_counter}"
-        key = f"{PLACEHOLDER_PREFIX}{unique_id}{PLACEHOLDER_SUFFIX}"
-        placeholder_counter += 1
-        placeholders[key] = content
-        return key
-
-    # 1. Process code block: `code` (prioritized to avoid being matched by other rules)
-    def _replace_code(match):
-        code_text = match.group(1)
-        placeholder = _create_placeholder(('code', code_text))
-        return placeholder
-    text = re.sub(r'`([^`]+)`', _replace_code, text)
-
-    # 2. Process bold: **text** or __text__ (prioritized over italic)
-    def _replace_bold_double(match):
-        bold_text = match.group(1)
-        placeholder = _create_placeholder(('bold', bold_text))
-        return placeholder
-    text = re.sub(r'\*\*([^*]+?)\*\*', _replace_bold_double, text)
-    text = re.sub(r'__([^_]+?)__', _replace_bold_double, text)
-
-    # 3. Process italic: *text* or _text_ (after bold)
-    def _replace_italic(match):
-        italic_text = match.group(1)
-        placeholder = _create_placeholder(('italic', italic_text))
-        return placeholder
-    # Match only single asterisks or underscores not inside bold
-    text = re.sub(r'(?<!\*)\*([^*]+?)\*(?!\*)', _replace_italic, text)
-    text = re.sub(r'(?<!_)_([^_]+?)_(?!_)', _replace_italic, text)
-
-    # 4. Process links:[text](url)
-    def _replace_link(match):
-        link_text = match.group(1)
-        link_url = match.group(2)
-        placeholder = _create_placeholder(('link', link_text, link_url))
-        return placeholder
-    text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', _replace_link, text)
-
-    # 5. Escape HTML special characters
-    text = html_module.escape(text)
-
-    # 6. Convert Markdown markers to HTML using regular expressions for precise global replacement
-    # Build regular expression pattern for placeholders
-    # Placeholder format: prefix + unique ID (timestamp_random_number_counter) + suffix
-    # Unique ID contains digits, underscores, and hyphens, using non-greedy matching to ensure exact matching
-    placeholder_pattern = re.compile(
-        re.escape(PLACEHOLDER_PREFIX) + r'[\d_\-]+' + re.escape(PLACEHOLDER_SUFFIX)
-    )
-
-    def _replace_placeholder(match):
-        """Replace matched placeholders"""
-        placeholder = match.group(0)
-        if placeholder in placeholders:
-            content = placeholders[placeholder]
-            if content[0] == 'code':
-                return f'<code>{html_module.escape(content[1])}</code>'
-            elif content[0] == 'bold':
-                return f'<strong>{html_module.escape(content[1])}</strong>'
-            elif content[0] == 'italic':
-                return f'<em>{html_module.escape(content[1])}</em>'
-            elif content[0] == 'link':
-                return f'<a href="{html_module.escape(content[2])}">{html_module.escape(content[1])}</a>'
-            else:
-                return html_module.escape(str(content))
-        else:
-            # If placeholder not in dictionary, log warning and return empty string
-            _print(f"[WARN] Discover unregistered placeholder: {placeholder[:50]}...")
-            return ''
-
-    # Perform global replacement using regular expressions
-    text = placeholder_pattern.sub(_replace_placeholder, text)
-
-    # 7. Cleanup mechanism: check and clean all un-replaced placeholders (including old format placeholders)
-    # Match all possible placeholder formats (including old format [MD_PLACEHOLDER_X] and new format)
-    old_placeholder_pattern = re.compile(r'\[MD_PLACEHOLDER_\d+\]')
-    new_placeholder_pattern = re.compile(
-        re.escape(PLACEHOLDER_PREFIX) + r'[\d_\-]+' + re.escape(PLACEHOLDER_SUFFIX)
-    )
-
-    # Check and clean old format placeholders
-    old_placeholders_found = old_placeholder_pattern.findall(text)
-    if old_placeholders_found:
-        _print(f"[WARN] Found {len(old_placeholders_found)} un-replaced old format placeholders, cleaning up...")
-        text = old_placeholder_pattern.sub('', text)
-
-    # Check and clean new format placeholders (theoretically should not exist, but for safety)
-    remaining_placeholders = new_placeholder_pattern.findall(text)
-    if remaining_placeholders:
-        _print(f"[WARN] Found {len(remaining_placeholders)} un-replaced new format placeholders, cleaning up...")
-        text = new_placeholder_pattern.sub('', text)
-
-    return text
-
-
 def _format_json_to_html(json_data: Any, level: int = 0) -> str:
     """
     Convert JSON data into a professional and well-formatted HTML report
@@ -1724,7 +1609,7 @@ def _render_html(
                            if k not in ['timestamp', 'total_queries', 'success_count', 'overall_recall', 'tools', 'arguments']}
             try:
                 analysis_content = json.dumps(filtered_dict, ensure_ascii=False, indent=2)
-            except:
+            except (TypeError, ValueError):
                 analysis_content = str(llm_json)
 
     # Ensure analysis_content is of string type
