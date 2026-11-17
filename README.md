@@ -235,6 +235,10 @@ The integration tests connect through MCP stdio, check the 116-tool registry, ca
 .venv/bin/python -m pytest -q
 ```
 
-## Open source statement
+## License
 
-The repository currently declares an MIT license. Confirm redistribution rights for included third-party modules before public release. `external/` is not versioned. Keep credentials out of Git and rotate any credentials that appeared in earlier repository history.
+This project is licensed under the [MIT License](LICENSE).
+
+## Security
+
+Keep credentials out of Git. `config.yaml` holds your real API keys and is ignored by Git; never commit it. If a credential was ever committed or exposed, rotate it immediately in the provider's console.
